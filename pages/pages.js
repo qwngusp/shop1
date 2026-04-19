@@ -96,6 +96,7 @@ const CartPage = (() => {
     }
 
     const total = State.getCartTotal();
+    const shippingTotal = State.getCartShipping();
     const coupon = State.getCoupon();
     let discount = 0;
     if (coupon) {
@@ -106,7 +107,7 @@ const CartPage = (() => {
         discount = parseInt(coupon.label.replace(/[^0-9]/g, ''));
       }
     }
-    const finalTotal = Math.max(0, total - discount);
+    const finalTotal = Math.max(0, total - discount) + shippingTotal;
 
     page.innerHTML = `
       <div class="header">
@@ -152,7 +153,7 @@ const CartPage = (() => {
         ` : ''}
         <div class="cart-summary__row">
           <span>배송비</span>
-          <span class="free">무료</span>
+          <span class="${shippingTotal === 0 ? 'free' : ''}">${shippingTotal === 0 ? '무료' : shippingTotal.toLocaleString() + '원'}</span>
         </div>
         <div class="cart-summary__row total">
           <span>결제 예정금액</span>
@@ -194,6 +195,7 @@ const CheckoutPage = (() => {
     const coupon = State.getCoupon();
 
     const total = State.getCartTotal();
+    const shippingTotal = State.getCartShipping();
     let discount = 0;
     if (coupon) {
       if (coupon.label.includes('%')) {
@@ -202,7 +204,7 @@ const CheckoutPage = (() => {
         discount = parseInt(coupon.label.replace(/[^0-9]/g, ''));
       }
     }
-    const finalTotal = Math.max(0, total - discount);
+    const finalTotal = Math.max(0, total - discount) + shippingTotal;
 
     const page = document.getElementById('page-checkout');
 
@@ -276,7 +278,7 @@ const CheckoutPage = (() => {
           ` : ''}
           <div class="checkout-price-row">
             <span>배송비</span>
-            <span class="free">무료</span>
+            <span class="${shippingTotal === 0 ? 'free' : ''}">${shippingTotal === 0 ? '무료' : shippingTotal.toLocaleString() + '원'}</span>
           </div>
           <div class="checkout-price-row total">
             <span>최종 결제금액</span>
