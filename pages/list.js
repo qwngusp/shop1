@@ -104,11 +104,6 @@ const ListPage = (() => {
           <span class="product-row__price">${p.discountedPrice.toLocaleString()}원</span>
           <p class="product-row__per-unit">(${p.pricePerUnit})</p>
         </div>
-        
-
-        <div class="product-row__footer">
-          <span class="product-row__shipping">${p.shipping}</span>
-        </div>
 
         <div class="product-row__rating">
           <span style="color:var(--star);font-size:11px;">★</span>
