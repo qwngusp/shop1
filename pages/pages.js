@@ -134,6 +134,11 @@ const CartPage = (() => {
               <p class="cart-item__price">${(item.unitPrice * item.quantity).toLocaleString()}원</p>
               <p class="cart-item__qty">수량: ${item.quantity}개</p>
             </div>
+            <button class="cart-item__delete" onclick="CartPage.removeItem(${i})" aria-label="삭제">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M18 6L6 18M6 6l12 12" stroke="#999" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
           </div>
         `).join('')}
       </div>
@@ -182,7 +187,13 @@ const CartPage = (() => {
     });
   };
 
-  return { init };
+  const removeItem = (index) => {
+    State.removeCartItem(index);
+    Router.updateCartBadge();
+    render();
+  };
+
+  return { init, removeItem };
 })();
 
 

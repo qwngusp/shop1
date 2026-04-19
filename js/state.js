@@ -120,6 +120,12 @@ const State = (() => {
     return getCart().reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
   };
 
+  const removeCartItem = (index) => {
+    const cart = getCart();
+    cart.splice(index, 1);
+    set(KEYS.CART, cart);
+  };
+
   const clearCart = () => set(KEYS.CART, []);
 
   // ── 쿠폰 ──────────────────────────────────────
@@ -147,6 +153,7 @@ const State = (() => {
     getCartCount,
     getCartTotal,
     getCartShipping,
+    removeCartItem,
     clearCart,
     getCoupon,
     applyCoupon,
