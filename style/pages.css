@@ -791,7 +791,7 @@
 
 .detail-per-unit {
   font-size: 12px;
-  color: var(--text-muted);
+  /* color: var(--text-muted); */
   white-space: nowrap;
   padding-bottom: 3px;
 }
@@ -806,7 +806,7 @@
 
 .detail-rating-row .stars { font-size: 13px; }
 
-.detail-review-count { color: var(--text-muted); }
+.detail-review-count { }
 
 .detail-price-wrap { margin-bottom: 8px; }
 
@@ -839,11 +839,6 @@
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-}
-
-.detail-per-unit {
-  font-size: 12px;
-  color: var(--text-muted);
 }
 
 .detail-coupon-row {
