@@ -99,7 +99,7 @@ const State = (() => {
     return cart;
   };
 
-  // 장바구니 전체 배송비 합계 (상품별 배송비 합산, 중복 productId는 한 번만 계산)
+  // 장바구니 전체 배송비 합계 (같은 productId는 한 번만 계산)
   const getCartShipping = () => {
     const cart = getCart();
     const seen = new Set();
@@ -112,18 +112,18 @@ const State = (() => {
     }, 0);
   };
 
+  const removeCartItem = (index) => {
+    const cart = getCart();
+    cart.splice(index, 1);
+    set(KEYS.CART, cart);
+  };
+
   const getCartCount = () => {
     return getCart().reduce((sum, item) => sum + item.quantity, 0);
   };
 
   const getCartTotal = () => {
     return getCart().reduce((sum, item) => sum + item.unitPrice * item.quantity, 0);
-  };
-
-  const removeCartItem = (index) => {
-    const cart = getCart();
-    cart.splice(index, 1);
-    set(KEYS.CART, cart);
   };
 
   const clearCart = () => set(KEYS.CART, []);
