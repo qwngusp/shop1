@@ -33,7 +33,7 @@ const ListPage = (() => {
       <!-- 검색결과 -->
       <div class="list-label-row">
         <span class="list-label">검색 결과</span>
-        <span class="list-total">총 <strong>${products.length || 20}개</strong></span>
+        <span class="list-total">총 <strong>${products.length || 6}개</strong></span>
       </div>
 
       <!-- 상품 리스트 -->
@@ -102,17 +102,21 @@ const ListPage = (() => {
         <div class="product-row__price-row">
           <span class="product-row__discount">${p.discountRate}%</span>
           <span class="product-row__price">${p.discountedPrice.toLocaleString()}원</span>
+          <!--<p class="product-row__per-unit">(${p.pricePerUnit})</p>-->
         </div>
+        
 
         <div class="product-row__footer">
           <span class="product-row__shipping">${p.shipping}</span>
         </div>
 
+        <!--
         <div class="product-row__rating">
           <span style="color:var(--star);font-size:11px;">★</span>
           <span style="font-size:11px;font-weight:700;">${p.rating}</span>
           <span style="font-size:11px;color:#999;">(${p.reviewCount.toLocaleString()})</span>
         </div>
+        -->
       </div>
     </div>
   `;
