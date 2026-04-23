@@ -273,7 +273,7 @@
 .product-row__original { font-size: 11px; color: var(--text-muted); text-decoration: line-through; }
 .product-row__per-unit { font-size: 13px; }
 .product-row__shipping {
-  font-size: 13px;
+  font-size: 15px;
   /* color: var(--text-secondary); */
 }
 .product-row__shipping strong {
