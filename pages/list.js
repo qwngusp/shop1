@@ -93,30 +93,15 @@ const ListPage = (() => {
       <div class="product-row__img">
         <img src="${p.image}" alt="${p.name}"
           onerror="this.parentNode.style.background='#f0f0f0';this.style.display='none';" />
-        ${p.discountRate >= 50 ? `<span class="product-row__badge">최저가</span>` : ''}
       </div>
       <div class="product-row__info">
         <p class="product-row__name_capacity">[브랜드${p.brand}] ${p.name} ${p.capacity}</p>
-
-        <p class="product-row__original">${p.originalPrice.toLocaleString()}원</p>
         <div class="product-row__price-row">
-          <span class="product-row__discount">${p.discountRate}%</span>
-          <span class="product-row__price">${p.discountedPrice.toLocaleString()}원</span>
-          <!--<p class="product-row__per-unit">(${p.pricePerUnit})</p>-->
+          <span class="product-row__price">${p.originalPrice.toLocaleString()}원</span>
         </div>
-        
-
         <div class="product-row__footer">
           <span class="product-row__shipping">${p.shipping}</span>
         </div>
-
-        <!--
-        <div class="product-row__rating">
-          <span style="color:var(--star);font-size:11px;">★</span>
-          <span style="font-size:11px;font-weight:700;">${p.rating}</span>
-          <span style="font-size:11px;color:#999;">(${p.reviewCount.toLocaleString()})</span>
-        </div>
-        -->
       </div>
     </div>
   `;
