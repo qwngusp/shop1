@@ -1,23 +1,8 @@
 // ===== P2: 상품 상세 페이지 =====
 
 const DetailPage = (() => {
-  const COUPON_RATE = 0.1;
+  const COUPON_RATE = 0.1;          // 쿠폰 할인율 10%
   const COUPON = { id: 'COUPON_10PCT', label: '10% 할인', name: '쇼핑 할인 쿠폰' };
-
-  // 상품별 중첩 토글 깊이 설정 (T1 조건 조작)
-  // 강도1 = 토글 1개(클릭 1번에 배송정보 노출)
-  // 강도2 = 토글 2중첩(토글1 → 토글2 → 배송정보)
-  // 강도3 = 토글 3중첩(토글1 → 토글2 → 토글3 → 배송정보)
-  // p001=C단품(6위,강도1), p002=B묶음(3위,강도2), p003=A단품(4위,강도2)
-  // p004=A묶음(1위,강도3), p005=C묶음(2위,강도2), p006=B단품(5위,강도2)
-  const TOGGLE_DEPTH = {
-    'p001': 1,
-    'p002': 2,
-    'p003': 2,
-    'p004': 3,
-    'p005': 2,
-    'p006': 2,
-  };
 
   let currentProduct = null;
   let selectedOption = null;
@@ -42,115 +27,6 @@ const DetailPage = (() => {
       ? Math.floor(getBasePrice() * (1 - COUPON_RATE))
       : getBasePrice();
 
-  // ── 배송 정보 HTML 생성 ─────────────────────────
-  // 강도1: 토글1 → 주소+배송비 바로 노출
-  // 강도2: 토글1 → [주소 토글] + [배송비 토글] → 각각 클릭하면 내용 노출
-  // 강도3: 토글1 → [주소 토글] + [배송비 토글] → 각각 클릭하면 [상세보기 버튼] → 버튼 클릭 시 내용 노출
-  const buildDeliveryToggleHTML = (p, depth) => {
-
-    if (depth === 1) {
-      return `
-        <div class="detail-delivery-toggle" id="delivery-toggle-1"
-             onclick="DetailPage.toggleDeliveryLevel(1)">
-          <span class="detail-delivery-label">배송 정보</span>
-          <div class="detail-delivery-summary">
-            <span class="detail-delivery-type-text" id="delivery-toggle-text-1">🔽 상세 정보</span>
-          </div>
-        </div>
-        <div class="delivery-inner" id="delivery-inner-1">
-          <div class="delivery-content">
-            <p class="detail-delivery-addr">&nbsp;&nbsp;> 배송 받을 주소 › <strong>우리집</strong></p>
-            <p class="detail-delivery-note"><br>&nbsp;&nbsp;> ${p.shipping}</p>
-          </div>
-        </div>
-      `;
-    }
-
-    if (depth === 2) {
-      return `
-        <div class="detail-delivery-toggle" id="delivery-toggle-1"
-             onclick="DetailPage.toggleDeliveryLevel(1)">
-          <span class="detail-delivery-label">배송 정보</span>
-          <div class="detail-delivery-summary">
-            <span class="detail-delivery-type-text" id="delivery-toggle-text-1">🔽 상세 정보</span>
-          </div>
-        </div>
-        <div class="delivery-inner" id="delivery-inner-1">
-
-          <!-- 주소 토글 -->
-          <div class="detail-delivery-toggle--sub"
-               onclick="DetailPage.toggleSubSection('addr')">
-            <span class="detail-delivery-sub-label">주소</span>
-            <span class="detail-delivery-sub-text" id="delivery-toggle-text-addr">🔽 상세 정보</span>
-          </div>
-          <div class="delivery-sub-inner" id="delivery-inner-addr">
-            <p class="detail-delivery-addr">&nbsp;&nbsp;> 배송 받을 주소 › <strong>우리집</strong></p>
-          </div>
-
-          <!-- 배송비 토글 -->
-          <div class="detail-delivery-toggle--sub"
-               onclick="DetailPage.toggleSubSection('fee')">
-            <span class="detail-delivery-sub-label">배송비</span>
-            <span class="detail-delivery-sub-text" id="delivery-toggle-text-fee">🔽 상세 정보</span>
-          </div>
-          <div class="delivery-sub-inner" id="delivery-inner-fee">
-            <p class="detail-delivery-note">&nbsp;&nbsp;> ${p.shipping}</p>
-          </div>
-
-        </div>
-      `;
-    }
-
-    if (depth === 3) {
-      return `
-        <div class="detail-delivery-toggle" id="delivery-toggle-1"
-             onclick="DetailPage.toggleDeliveryLevel(1)">
-          <span class="detail-delivery-label">배송 정보</span>
-          <div class="detail-delivery-summary">
-            <span class="detail-delivery-type-text" id="delivery-toggle-text-1">🔽 상세 정보</span>
-          </div>
-        </div>
-        <div class="delivery-inner" id="delivery-inner-1">
-
-          <!-- 주소 토글 -->
-          <div class="detail-delivery-toggle--sub"
-               onclick="DetailPage.toggleSubSection('addr')">
-            <span class="detail-delivery-sub-label">주소</span>
-            <span class="detail-delivery-sub-text" id="delivery-toggle-text-addr">🔽 상세 정보</span>
-          </div>
-          <div class="delivery-sub-inner" id="delivery-inner-addr">
-            <button class="btn btn-outline delivery-detail-btn" id="delivery-addr-btn"
-                    onclick="DetailPage.showFinalDelivery('addr')">
-              내용확인하기
-            </button>
-            <div class="delivery-final" id="delivery-addr-final">
-              <p class="detail-delivery-addr">&nbsp;&nbsp;> 배송 받을 주소 › <strong>우리집</strong></p>
-            </div>
-          </div>
-
-          <!-- 배송비 토글 -->
-          <div class="detail-delivery-toggle--sub"
-               onclick="DetailPage.toggleSubSection('fee')">
-            <span class="detail-delivery-sub-label">배송비</span>
-            <span class="detail-delivery-sub-text" id="delivery-toggle-text-fee">🔽 상세 정보</span>
-          </div>
-          <div class="delivery-sub-inner" id="delivery-inner-fee">
-            <button class="btn btn-outline delivery-detail-btn" id="delivery-fee-btn"
-                    onclick="DetailPage.showFinalDelivery('fee')">
-              내용확인하기
-            </button>
-            <div class="delivery-final" id="delivery-fee-final">
-              <p class="detail-delivery-note">&nbsp;&nbsp;> ${p.shipping}</p>
-            </div>
-          </div>
-
-        </div>
-      `;
-    }
-
-    return '';
-  };
-
   // ── 초기화 ──────────────────────────────────────
   const init = async (params) => {
     const productId = params.id;
@@ -168,7 +44,6 @@ const DetailPage = (() => {
   const render = () => {
     const p = currentProduct;
     const applied = isCouponApplied(p.id);
-    const depth = TOGGLE_DEPTH[p.id] || 1;
     const page = document.getElementById('page-detail');
 
     page.innerHTML = `
@@ -215,9 +90,12 @@ const DetailPage = (() => {
 
       <div class="divider"></div>
 
-      <!-- 배송 중첩 토글 영역 -->
-      <div id="delivery-toggle-wrap">
-        ${buildDeliveryToggleHTML(p, depth)}
+      <div class="detail-delivery-row">
+        <span class="detail-delivery-label">배송 정보</span>
+        <div class="detail-delivery-info">
+          <p class="detail-delivery-addr">배송 받을 주소 › <strong>우리집</strong></p>
+          <p class="detail-delivery-note">${p.shipping} </p>
+        </div>
       </div>
 
       <div class="divider"></div>
@@ -248,61 +126,6 @@ const DetailPage = (() => {
         <div id="coupon-sheet-content"></div>
       </div>
     `;
-  };
-
-  // ── 토글1 열기/닫기 (배송 정보 최상위) ──────────
-  const toggleDeliveryLevel = (level) => {
-    const innerEl = document.getElementById(`delivery-inner-${level}`);
-    const textEl  = document.getElementById(`delivery-toggle-text-${level}`);
-    if (!innerEl) return;
-
-    const isOpen = innerEl.style.display === 'block';
-    if (isOpen) {
-      innerEl.style.display = 'none';
-      if (textEl) textEl.textContent = '🔽 상세 정보';
-      // 하위 서브섹션 모두 초기화
-      ['addr', 'fee'].forEach(key => {
-        const sub    = document.getElementById(`delivery-inner-${key}`);
-        const subTxt = document.getElementById(`delivery-toggle-text-${key}`);
-        const btn    = document.getElementById(`delivery-${key}-btn`);
-        const final  = document.getElementById(`delivery-${key}-final`);
-        if (sub)    sub.style.display = 'none';
-        if (subTxt) subTxt.textContent = '🔽 상세 정보';
-        if (btn)    btn.style.display = '';
-        if (final)  final.style.display = 'none';
-      });
-    } else {
-      innerEl.style.display = 'block';
-      if (textEl) textEl.textContent = '🔼 상세 정보';
-    }
-  };
-
-  // ── 서브 토글 열기/닫기 (주소 / 배송비) ─────────
-  const toggleSubSection = (key) => {
-    const innerEl = document.getElementById(`delivery-inner-${key}`);
-    const textEl  = document.getElementById(`delivery-toggle-text-${key}`);
-    if (!innerEl) return;
-
-    const isOpen = innerEl.style.display === 'block';
-    if (isOpen) {
-      innerEl.style.display = 'none';
-      if (textEl) textEl.textContent = '🔽 상세 정보';
-      const btn   = document.getElementById(`delivery-${key}-btn`);
-      const final = document.getElementById(`delivery-${key}-final`);
-      if (btn)   btn.style.display = '';
-      if (final) final.style.display = 'none';
-    } else {
-      innerEl.style.display = 'block';
-      if (textEl) textEl.textContent = '🔼 상세 정보';
-    }
-  };
-
-  // ── 강도3 전용: 상세보기 버튼 클릭 시 내용 노출 ──
-  const showFinalDelivery = (key) => {
-    const btn   = document.getElementById(`delivery-${key}-btn`);
-    const final = document.getElementById(`delivery-${key}-final`);
-    if (btn)   btn.style.display = 'none';
-    if (final) final.style.display = 'block';
   };
 
   // ── 가격 HTML ────────────────────────────────────
@@ -338,7 +161,7 @@ const DetailPage = (() => {
     }
     return `
       <span class="detail-coupon-label">쿠폰</span>
-      <button class="detail-coupon-btn" id="btn-open-coupon"><span>✅</span> 쿠폰 적용하기</button>
+      <button class="detail-coupon-btn" id="btn-open-coupon"><span>✅</span> 쿠폰 적용하기 </button>
     `;
   };
 
@@ -355,6 +178,7 @@ const DetailPage = (() => {
       if (quantity < 99) { quantity++; updateQtyDisplay(); }
     });
 
+    // 초기 금액 표시
     updateQtyDisplay();
 
     document.getElementById('btn-cart').addEventListener('click', () => {
@@ -440,5 +264,5 @@ const DetailPage = (() => {
     }
   };
 
-  return { init, applyAndClose, closeCouponSheet, toggleDeliveryLevel, toggleSubSection, showFinalDelivery };
+  return { init, applyAndClose, closeCouponSheet };
 })();
