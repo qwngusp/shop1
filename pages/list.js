@@ -230,7 +230,7 @@ const ListPage = (() => {
             🔽 배송 정보
           </div>
           <div id="list-shipping-inner-${id}" class="product-row__shipping-detail" style="display:none;">
-            <span class="product-row__shipping"><span class="shipping-box-icon">📦</span>${p.shipping}</span>
+            <span class="product-row__shipping"><span class="shipping-box-icon"></span>${p.shipping}</span>
           </div>
         </div>
       `;
